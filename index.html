@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gear Studio 2D</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="control-panel">
+        <div class="panel-header">
+          <p class="eyebrow">Generador 2D</p>
+          <h1>Gear Studio</h1>
+        </div>
+
+        <section class="panel-section">
+          <div class="section-title-row">
+            <div>
+              <p class="section-kicker">Escena</p>
+              <h2>Configuracion global</h2>
+            </div>
+            <button id="playToggle" class="status-pill is-live" type="button" aria-pressed="true">
+              <span class="live-dot" aria-hidden="true"></span>
+              <span id="playToggleLabel">Live</span>
+            </button>
+          </div>
+
+          <div class="global-compact-grid">
+            <label class="compact-field compact-field-number">
+              <span>Numero</span>
+              <input id="gearCount" type="number" min="1" max="5" step="1" value="2" inputmode="numeric" />
+            </label>
+
+            <label class="compact-field compact-field-range">
+              <div class="compact-field-head">
+                <span>Velocidad</span>
+                <strong id="baseSpeedValue">6 rpm</strong>
+              </div>
+              <input id="baseSpeed" type="range" min="2" max="18" step="1" value="6" />
+            </label>
+
+            <label class="compact-field compact-field-range">
+              <div class="compact-field-head">
+                <span>Separacion</span>
+                <strong id="spacingValue">6 px</strong>
+              </div>
+              <input id="spacing" type="range" min="0" max="32" step="1" value="6" />
+            </label>
+          </div>
+        </section>
+
+        <section class="panel-section">
+          <div class="section-title-row">
+            <div>
+              <p class="section-kicker">Parametros</p>
+              <h2>Engranes</h2>
+            </div>
+          </div>
+          <div id="gearCards" class="gear-cards"></div>
+        </section>
+      </aside>
+
+      <main class="workspace">
+        <section class="stage-card">
+          <div class="stage-head">
+            <div>
+              <p class="section-kicker">Render</p>
+              <h2>Vista previa tecnica</h2>
+            </div>
+            <div class="stage-toolbar">
+              <label class="zoom-control" for="zoomRange">
+                <span>Zoom</span>
+                <input id="zoomRange" type="range" min="60" max="180" step="5" value="100" />
+                <strong id="zoomValue">100%</strong>
+              </label>
+              <button id="resetView" class="ghost-button" type="button">Centrar vista</button>
+              <div class="legend">
+                <span><i class="legend-dot primary"></i> Gear Body</span>
+                <span><i class="legend-dot accent"></i> Pitch Guide</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="stage-frame">
+            <svg id="gearScene" viewBox="0 0 1200 760" role="img" aria-label="Vista previa de engranes"></svg>
+            <div class="stage-download">
+              <label class="download-format" for="downloadFormat">
+                <span>Formato</span>
+                <select id="downloadFormat">
+                  <option value="svg">SVG</option>
+                  <option value="dxf">DXF</option>
+                  <option value="stl">STL</option>
+                </select>
+              </label>
+              <button id="downloadButton" class="download-button" type="button">Descargar</button>
+            </div>
+            <div class="hud">
+              <span id="hudSummary">1 engrane activo</span>
+              <span id="hudStatus">Animacion continua</span>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <template id="gearCardTemplate">
+      <details class="gear-card">
+        <summary class="gear-card-header">
+          <div class="gear-card-title">
+            <p class="section-kicker">Gear</p>
+            <h3></h3>
+          </div>
+          <div class="gear-card-meta">
+            <span class="gear-chip">Acoplado</span>
+            <span class="gear-caret" aria-hidden="true"></span>
+          </div>
+        </summary>
+        <div class="gear-card-body">
+          <div class="field-grid compact">
+            <label class="field field-wide">
+              <span>Nombre</span>
+              <input data-field="name" type="text" maxlength="24" />
+              <small>Identificador visible del engrane</small>
+            </label>
+            <label class="field">
+              <span>Dientes</span>
+              <input data-field="teeth" type="number" min="8" max="400" step="1" inputmode="numeric" />
+            </label>
+            <label class="field">
+              <span>Diametro de paso</span>
+              <input data-field="pitchDiameter" type="number" min="40" max="520" step="0.01" inputmode="decimal" />
+              <small>Este valor define el tamano base del engrane</small>
+            </label>
+            <label class="field">
+              <span>Pitch diametral</span>
+              <input data-field="diametralPitch" type="number" min="0.04" max="2" step="0.0001" inputmode="decimal" />
+              <small>Se recalcula junto con dientes y diametro</small>
+            </label>
+            <label class="field">
+              <span>Angulo de presion</span>
+              <input data-field="pressureAngle" type="number" min="12" max="35" step="0.5" inputmode="decimal" />
+              <small>Rango tecnico comun entre 14.5° y 25°</small>
+            </label>
+            <label class="field">
+              <span>Hueco central</span>
+              <input data-field="boreRatio" type="number" min="10" max="70" step="1" inputmode="numeric" />
+              <small>Porcentaje del radio de raiz usado para el barreno</small>
+            </label>
+            <div class="field field-wide gear-metrics" data-role="metrics"></div>
+          </div>
+        </div>
+      </details>
+    </template>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

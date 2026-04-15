@@ -1,0 +1,9 @@
+{
+  "name": "gear-studio-downloads",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Generador de engranes con pago por descarga y exportacion SVG protegida desde backend.",
+  "scripts": {
+    "start": "node server.js"
+  }
+}
