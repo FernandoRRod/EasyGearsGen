@@ -1,3 +1,40 @@
 {
-  "orders": []
+  "orders": [
+    {
+      "id": "ord_8a35e1030a5e",
+      "amount": 20,
+      "currency": "MXN",
+      "paymentMode": "demo",
+      "status": "paid",
+      "createdAt": "2026-04-15T22:44:23.468Z",
+      "expiresAt": "2026-04-15T23:14:23.469Z",
+      "downloadToken": "dl_6cec0ec81210",
+      "exportFormat": "svg",
+      "exportConfig": {
+        "global": {
+          "gearCount": 2,
+          "baseSpeed": 6,
+          "spacing": 6
+        },
+        "gears": [
+          {
+            "name": "Engrane A",
+            "teeth": 18,
+            "pitchDiameter": 120,
+            "diametralPitch": 0.15,
+            "pressureAngle": 20,
+            "boreRatio": 26
+          },
+          {
+            "name": "Engrane B",
+            "teeth": 28,
+            "pitchDiameter": 186.67,
+            "diametralPitch": 0.15,
+            "pressureAngle": 20,
+            "boreRatio": 24
+          }
+        ]
+      }
+    }
+  ]
 }

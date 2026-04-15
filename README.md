@@ -1,56 +1,85 @@
-# Gear Studio con pago por descarga
+# Gear Studio
 
-La app ahora ya no depende solo del JavaScript del navegador para liberar la exportacion.
+Generador de engranes 2D con vista previa interactiva, flujo de orden de descarga y exportacion SVG desde backend.
 
-## Como funciona
+## Estructura
 
-- El frontend deja configurar y previsualizar los engranes.
-- Cuando el usuario hace clic en `Pagar y descargar SVG`, el backend crea una orden.
-- Solo cuando la orden cambia a `paid`, el servidor genera el SVG final y libera un enlace de descarga.
-- La configuracion del engrane se guarda del lado servidor en `data/orders.json`.
+```text
+public/
+  index.html
+  styles.css
+  js/
+    api-client.js
+    gear-math.js
+    main.js
+    scene-renderer.js
+    state.js
+src/
+  server/
+    app.js
+    config/
+    middleware/
+    repositories/
+    routes/
+    services/
+    utils/
+data/
+  orders.json
+server.js
+```
+
+## Responsabilidades
+
+- `server.js`: punto de entrada del proceso Node.
+- `src/server/app.js`: composicion de Express y montaje de middleware/rutas.
+- `src/server/routes/api.js`: contrato HTTP del backend.
+- `src/server/services/order-service.js`: reglas de negocio de ordenes y descargas.
+- `src/server/services/svg-exporter.js`: construccion del SVG exportable.
+- `src/server/services/gear-math.js`: geometria y calculos del engrane.
+- `src/server/repositories/order-repository.js`: persistencia en `data/orders.json`.
+- `public/js/main.js`: orquestacion del frontend.
+- `public/js/scene-renderer.js`: render y animacion de la escena.
+- `public/js/api-client.js`: comunicacion con backend.
+- `public/js/gear-math.js`: calculos del lado cliente para preview.
 
 ## Ejecutar
 
-Necesitas Node.js 18 o superior instalado.
+Necesitas Node.js 18 o superior.
 
 ```bash
 npm start
 ```
 
-Luego abre:
+Modo desarrollo con recarga:
+
+```bash
+npm run dev
+```
+
+Abre:
 
 ```text
 http://localhost:3000
 ```
 
-## Variables utiles
+## Variables de entorno
 
-- `PORT`: puerto del servidor. Por defecto `3000`.
-- `PRICE_MXN`: precio por descarga. Por defecto `20`.
-- `PAYMENT_MODE`: hoy esta en `demo`.
-- `ORDER_TTL_MS`: tiempo de vida de una orden pendiente.
+- `PORT`: puerto del servidor. Default `3000`.
+- `PRICE_MXN`: precio por descarga. Default `20`.
+- `CURRENCY`: moneda de la orden. Default `MXN`.
+- `PAYMENT_MODE`: modo de pago. Default `demo`.
+- `ORDER_TTL_MINUTES`: vigencia de orden pendiente. Default `30`.
 
-Ejemplo en PowerShell:
+## API actual
 
-```powershell
-$env:PRICE_MXN="20"
-$env:PAYMENT_MODE="demo"
-npm start
-```
+- `GET /api/config`
+- `POST /api/orders`
+- `GET /api/orders/:orderId`
+- `POST /api/orders/:orderId/pay-demo`
+- `GET /api/download/:downloadToken`
 
-## Siguiente paso para cobrar de verdad
+## Notas
 
-La base ya esta lista para proteger la descarga. Lo siguiente es conectar una pasarela real:
-
-1. Crear la preferencia/sesion de pago en `POST /api/orders`.
-2. Confirmar el pago con webhook.
-3. Cambiar la orden a `paid` solo despues de verificar la notificacion del proveedor.
-4. Mantener `GET /api/download/:token` como unica salida del archivo final.
-
-## Recomendacion de despliegue
-
-Para algo sencillo y barato:
-
-- Frontend + backend juntos en Railway, Render o un VPS pequeno.
-- Stripe o Mercado Pago para cobrar.
-- Guardar ordenes en una base real cuando empieces a vender en produccion.
+- El frontend y backend ya viven bajo el mismo servidor para evitar problemas de CORS en local.
+- El meta tag `gear-api-base` sigue disponible si en algun entorno decides separar el frontend del backend.
+- La exportacion activa hoy es `SVG`; `DXF` y `STL` permanecen como siguiente etapa.
